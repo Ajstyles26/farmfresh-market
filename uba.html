@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unity Bank Nigeria</title>
+    <style>
+        :root {
+            --primary-color: #006F44;
+            --secondary-color: #FDB913;
+            --text-dark: #333;
+            --text-light: #666;
+            --background-light: #f5f5f5;
+            --white: #ffffff;
+            --border-color: #e0e0e0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--background-light);
+        }
+
+        /* Header & Navigation */
+        .header {
+            background-color: var(--white);
+            padding: 15px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .top-bar {
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 8px 0;
+            font-size: 0.9em;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-link:hover {
+            color: var(--primary-color);
+        }
+
+        /* Dashboard Styles */
+        .dashboard {
+            display: none;
+        }
+
+        .nav {
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 1rem;
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-brand {
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .main-content {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .balance-card {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .action-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            background: var(--background-light);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .action-btn:hover {
+            background: #eee;
+        }
+
+        .transaction-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem;
+            background: var(--background-light);
+            margin-bottom: 0.5rem;
+            border-radius: 4px;
+        }
+
+        .credit { color: #22c55e; }
+        .debit { color: #ef4444; }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5));
+            background-size: cover;
+            color: var(--white);
+            padding: 100px 0;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+        }
+
+        /* Login Styles */
+        .login-btn {
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 10px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+
+        .login-btn:hover {
+            background-color: #005533;
+        }
+
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--background-light);
+        }
+
+        .login-card {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .login-header {
+            text-align: center;
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+        }
+
+        .login-form input {
+            width: 100%;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background-color: var(--white);
+            width: 90%;
+            max-width: 400px;
+            margin: 100px auto;
+            padding: 30px;
+            border-radius: 10px;
+            position: relative;
+        }
+
+        .close-btn {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            font-size: 1.5em;
+            cursor: pointer;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 60px 0 20px;
+            margin-top: auto;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-links h3 {
+            margin-bottom: 20px;
+            color: var(--secondary-color);
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: var(--white);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .session-timer {
+            color: var(--text-light);
+            font-size: 0.8em;
+            text-align: right;
+            margin: 8px 0;
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+            
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Main Page -->
+    <div id="mainPage">
+        <div class="top-bar">
+            <div class="container">
+                <div>Exchange Rate: $1 = ₦1635.00 | GB£1 = ₦1685.00 | €1 = ₦2033.00</div>
+            </div>
+        </div>
+
+        <header class="header">
+            <div class="container header-content">
+                <div class="logo">Unity Bank</div>
+                <nav class="nav-menu">
+                    <a href="#" class="nav-link">Personal Banking</a>
+                    <a href="#" class="nav-link">Business Banking</a>
+                    <a href="#" class="nav-link">Digital Banking</a>
+                    <a href="#" class="nav-link">About Us</a>
+                </nav>
+                <button class="login-btn" onclick="showLoginModal()">Internet Banking</button>
+            </div>
+        </header>
+
+        <section class="hero">
+            <div class="container">
+                <h1>Bank With Confidence</h1>
+                <p>Experience seamless banking with Nigeria's most trusted financial partner</p>
+                <button class="login-btn" onclick="showLoginModal()">Get Started</button>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="container">
+                <div class="footer-grid">
+                    <div class="footer-links">
+                        <h3>Quick Links</h3>
+                        <ul>
+                            <li><a href="#">About Us</a></li>
+                            <li><a href="#">Careers</a></li>
+                            <li><a href="#">Contact Us</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-links">
+                        <h3>Banking Services</h3>
+                        <ul>
+                            <li><a href="#">Savings Account</a></li>
+                            <li><a href="#">Current Account</a></li>
+                            <li><a href="#">Loans</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-links">
+                        <h3>Contact Us</h3>
+                        <ul>
+                            <li>Head Office: Lagos, Nigeria</li>
+                            <li>Phone: 0700-UNITYBANK</li>
+                            <li>Email: info@unitybank.com</li>
+                        </ul>
+                    </div>
+                </div>
+                <div style="text-align: center; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
+                    © 2025 Unity Bank. All rights reserved.
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboardPage" class="dashboard">
+        <nav class="nav">
+            <div class="container nav-content">
+                <div class="nav-brand">Unity Bank</div>
+                <div class="nav-actions">
+                    <span>🔔</span>
+                    <button onclick="logout()" class="btn-logout">Logout</button>
+                </div>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <div class="session-timer"></div>
+            <div class="grid">
+                <div class="card balance-card">
+                    <div>
+                        <p>Welcome back,</p>
+                        <h2>John Doe</h2>
+                        <p>Acc: 1234567890</p>
+                    </div>
+                    <div>
+                        <p>Available Balance</p>
+                        <h2>₦2,500,000.00</h2>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Quick Actions</h3>
+                    <div class="quick-actions">
+                        <button class="action-btn">
+                            <span>↗️</span>
+                            <span>Transfer</span>
+                        </button>
+                        <button class="action-btn">
+                            <span>📱</span>
+                            <span>Airtime</span>
+                        </button>
+                        <button class="action-btn">
+                            <span>💳</span>
+                            <span>Bills</span>
+                        </button>
+                        <button class="action-btn">
+                            <span>💱</span>
+                            <span>FX</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Recent Transactions</h3>
+                <div class="transactions">
+                    <div class="transaction-item">
+                        <div>
+                            <p>Salary Payment</p>
+                            <small>2025-01-07</small>
+                        </div>
+                        <p class="credit">+₦50,000</p>
+                    </div>
+                    <div class="transaction-item">
+                        <div>
+                            <p>ATM Withdrawal</p>
+                            <small>2025-01-06</small>
+                        </div>
+                        <p class="debit">-₦15,000</p>
+                    </div>
+                    <div class="transaction-item">
+                        <div>
+                            <p>Transfer to Alice</p>
+                            <small>2025-01-05</small>
+                        </div>
+                        <p class="debit">-₦25,000</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeLoginModal()">&times;</span>
+            <h2>Internet Banking Login</h2>
+            <form class="login-form">
+                <input type="text" placeholder="Account Number" required>
+                <input type="password" placeholder="Password" required>
+                <button type="submit" class="login-btn">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Session Management
+        let sessionTimeout;
+        const SESSION_DURATION = 300; // 5 minutes
+        let remainingTime = SESSION_DURATION;
+
+        function startSessionTimer() {
+            if (sessionTimeout) {
+                clearInterval(sessionTimeout);
+            }
+            
+            sessionTimeout = setInterval(() => {
+                remainingTime--;
+                updateSessionTimer();
+                
+                if (remainingTime <= 0) {
+                    logout();
+                    alert('Your session has expired. Please login again.');
+                }
+            }, 1000);
+        }
+
+        function updateSessionTimer() {
+            const minutes = Math.floor(remainingTime / 60);
+            const seconds = remainingTime % 60;
+            document.querySelector('.session-timer').textContent = 
+                `Session expires in: ${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        // Modal Functions
+        function showLoginModal() {
+            document.getElementById('loginModal').style.display = 'block';
+        }
+
+        function closeLoginModal() {
+            document.getElementById('loginModal').style.display = 'none';
+        }
+
+        function navigateToDashboard() {
+            document.getElementById('mainPage').style.display = 'none';
+            document.getElementById('dashboardPage').style.display = 'block';
+            startSessionTimer();
+        }
+
+        function logout() {
+            clearInterval(sessionTimeout);
+            document.getElementById('mainPage').style.display = 'block';
+            document.getElementById('dashboardPage').style.display = 'none';
+            remainingTime = SESSION_DURATION;
+        }
+
+        // Event Listeners
+        document.querySelector('.login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const accountNumber = this.querySelector('input[type="text"]').value;
+            const password = this.querySelector('input[type="password"]').value;
+
+            if (!accountNumber || !password) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            // Show loading state
+            const submitButton = this.querySelector('button');
+            submitButton.textContent = 'Logging in...';
+            submitButton.disabled = true;
+
+            // Simulate login
+            setTimeout(() => {
+                submitButton.textContent = 'Login';
+                submitButton.disabled = false;
+                closeLoginModal();
+                navigateToDashboard();
+            }, 1500);
+        });
+
+        // Window click handler
+        window.onclick = function(event) {
+            const modal = document.getElementById('loginModal');
+            if (event.target === modal) {
+                closeLoginModal();
+            }
+        }
+
+        // Quick Actions
+        document.querySelectorAll('.action-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const action = this.querySelector('span:last-child').textContent;
+                alert(`${action} feature will be implemented soon.`);
+            });
+        });
+
+        // Exchange Rate Updates
+        function updateExchangeRates() {
+            const rates = {
+                USD: {
+                    buy: (1635 + Math.random() * 2).toFixed(2),
+                    sell: (1630 + Math.random() * 2).toFixed(2)
+                },
+                EUR: {
+                    buy: (1685 + Math.random() * 2).toFixed(2),
+                    sell: (1680 + Math.random() * 2).toFixed(2)
+                },
+                GBP: {
+                    buy: (2033 + Math.random() * 2).toFixed(2),
+                    sell: (2030 + Math.random() * 2).toFixed(2)
+                }
+            };
+
+            // Update top bar
+            if (document.querySelector('.top-bar')) {
+                const topBar = document.querySelector('.top-bar .container div');
+                topBar.textContent = `Exchange Rate: $1 = ₦${rates.USD.sell} | GB£1 = ₦${rates.GBP.sell} | €1 = ₦${rates.EUR.sell}`;
+            }
+        }
+
+        // Initial rates update and set interval
+        updateExchangeRates();
+        setInterval(updateExchangeRates, 30000);
+
+        // Mobile menu toggle
+        const menuButton = document.createElement('button');
+        menuButton.className = 'menu-toggle';
+        menuButton.innerHTML = '☰';
+        menuButton.style.cssText = `
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            color: var(--primary-color);
+            cursor: pointer;
+            @media (max-width: 768px) {
+                display: block;
+            }
+        `;
+
+        if (document.querySelector('.header-content')) {
+            document.querySelector('.header-content').insertBefore(
+                menuButton,
+                document.querySelector('.nav-menu')
+            );
+        }
+
+        menuButton.addEventListener('click', () => {
+            const navMenu = document.querySelector('.nav-menu');
+            navMenu.style.display = navMenu.style.display === 'flex' ? 'none' : 'flex';
+        });
+
+        // Currency formatter
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('en-NG', {
+                style: 'currency',
+                currency: 'NGN'
+            }).format(amount);
+        }
+    </script>
+</body>
+</html>
